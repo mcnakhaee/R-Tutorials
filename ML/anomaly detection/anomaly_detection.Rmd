@@ -1,0 +1,28 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(performance)
+library(palmerpenguins)
+```
+
+```{r}
+outlier <- check_outliers(penguins$bill_length_mm)
+outlier
+as.numeric(outlier)
+```
+
+```{r}
+penguins$bill_length_mm_outlier <- as.numeric(outlier)
+```
+
+```{r}
+penguins %>% 
+  ggplot(aes(bill_length_mm,bill_depth_mm,color = as.factor(bill_length_mm_outlier))) +
+  geom_point() +
+  theme_void()
+```
+

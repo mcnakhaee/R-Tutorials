@@ -1,0 +1,52 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(ggforce)
+library(tidyverse)
+library(geofacet)
+library(dadegan)
+devtools::install_github('mcnakhaee/dadegan')
+```
+
+```{r}
+mygrid <- data.frame(
+  row = c(1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7),
+  col = c(4, 3, 2, 7, 6, 4, 5, 3, 2, 7, 4, 5, 6, 2, 3, 7, 5, 6, 4, 2, 3, 5, 6, 3, 4, 4, 5, 6, 7, 4, 5),
+  code = c("AR", "EA", "WA", "KS", "GO", "GI", "MN", "ZA", "KD", "KV", "AL", "TE", "SM", "BK", "QZ", "KJ", "MK", "QM", "HD", "IL", "LO", "ES", "YA", "KZ", "CM", "KB", "FA", "KE", "SB", "BS", "HG"),
+  name = c("Ardabil", "Eest Azerbijan", "West Azerbijan", "North Khorasan", "Golestan", "Gilan", "Mazandaran", "Zanjan", "Kurdistan", "Razavi Khorasan", "Alborz", "Tehran", "Semnan", "Kermanshah", "Qazvin", "South Khorasan", "Markazi", "Qom", "Hamedan", "Ilam", "Lorestan", "Esfahan", "Yazd", "Khuzesan", "Chaharmahal and Bakhtiari", "Kohgiluyeh and Boyer-Ahmad", "Fars", "Kerman", "Sistan and Baluchestan", "Bushehr", "Hormozgan"),
+  name_farsi = c("اردبیل", "آذربایجان شرقی", "آذربایجان غربی", "خراسان شمالی", "گلستان", "گیلان", "مازندران", "زنجان", "کردستان", "خراسان رضوی", "البرز", "تهران", "سمنان", "کرمانشاه", "قزوین", "خراسان جنوبی", "مرکزی", "قم", "همدان", "ایلام", "لرستان", "اصفهان", "یزد", "خوزستان", "چهارمحال و بختیاری", "کهگیلویه و بویراحمد", "فارس", "کرمان", "سیستان و بلوچستان", "بوشهر", "هرمزگان"),
+  stringsAsFactors = FALSE
+)
+```
+
+```{r fig.height=10,fig.width=10}
+#geom_regon()
+mygrid_2 <- mygrid
+mygrid_2$test  <- runif(nrow(mygrid))
+mygrid_2 %>% 
+ggplot() +
+  geom_regon(aes(x0 = 1, y0 = 1, sides = 6,
+                 angle = 0, r = test,fill = test)) +
+  #geom_histogram(aes(x = test),fill = 'grey' )+
+  geom_text(aes(x = 1,y = 1,label = name_farsi))+
+  facet_geo(~name_farsi,grid = mygrid )+
+  coord_fixed()+
+  theme_void(
+    
+  ) +
+  
+  theme(panel.margin.y = unit(-1, "lines"))
+
+
+ggplot(ubaar, aes(price)) +
+  geom_histogram() +
+  facet_geo(~name_farsi,grid = my_grid) +
+  theme_fivethirtyeight() +
+  theme(strip.text = element_text(family = 'B Nazanin',size = 20),
+        axis.text.x  = element_blank(),
+        stri)
+```
+

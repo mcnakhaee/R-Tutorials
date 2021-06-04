@@ -1,0 +1,40 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(ggthemes)
+library(tidytuesdayR)
+library(geofacet)
+```
+
+```{r, fig.height=20,fig.width=20}
+
+tt_data <- tt_load("2021-04-06")
+data <- tt_data$forest %>%
+  mutate(deforestation = if_else(net_forest_conversion < 0, 'negative', 'positive')) %>%
+  rename(name = entity) 
+data %>% 
+  ggplot() +
+  #geom_area(data = data %>% filter(net_forest_conversion > 0),aes(x = year, y = net_forest_conversion), fill = '#00afb9') +
+  geom_area(aes(x = year, y = net_forest_conversion, fill = deforestation), position = "identity") +
+  scale_fill_manual(values = c('#06d6a0','#ef476f')) +
+  #geom_step() +
+  facet_geo( ~ name, grid = world_countries_grid1) +
+  theme_void()
+p
+
+```
+
+```{r}
+ggsave(
+  'TidyTuesday-2021-04-06.png',
+  plot = p,
+  path = here::here('plots'),
+  width = 20,
+  height = 20
+)
+```
+

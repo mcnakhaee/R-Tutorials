@@ -1,0 +1,61 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(magick)
+library(imager)
+library(scales)
+library(here)
+library(fs)
+library(ggthemes)
+get_colorPal <- function(url){
+  
+  im <- image_read(url) # added to read the image inside the function
+  
+  out <- im %>%
+    image_quantize(max = 10, colorspace = "RGB") %>%
+    magick2cimg() %>%  ## prep for making data frame
+    RGBtoHSV() %>% # to get hue
+    as.data.frame(wide = "c") %>%  ## making it wide
+    mutate(hex = hsv(rescale(c.1, from = c(0,360)), c.2, c.3),
+           hue = c.1) %>%
+    count(hex, hue, sort = TRUE) %>%
+    mutate(colorspace = 'RGB') %>%
+    select(hex, hue, n)
+  
+  return(out)
+  
+}
+```
+```{r}
+  water_colors <- tibble(path = as.character(dir_ls('C:\\Users\\chen385619\\OneDrive - Exact Group B.V\\Documents\\myown\\data\\farshchian'))) %>%
+    mutate(file = basename(path)) %>% 
+    mutate(colors = map(path, get_colorPal))
+```
+
+```{r}
+water_colors %>% 
+  #mutate(y_idx = seq_along(id)) %>% 
+  unnest(c("colors")) %>% 
+  #group_by(id) %>% 
+  mutate(x_idx = row_number()) %>% 
+  #ungroup() %>% 
+  ggplot(aes(x_idx,1,fill = hex)) + 
+  geom_tile() +
+    scale_fill_identity() +
+
+  coord_polar()+
+      ylim(c(0, 2
+             )) +
+
+  theme_void() +
+  theme(legend.position = 'none')
+```
+
+```{r}
+
+```
+

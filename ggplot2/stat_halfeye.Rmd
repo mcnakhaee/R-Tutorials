@@ -1,0 +1,25 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(ggdist)
+library(tidyverse)
+```
+
+```{r}
+dadegan::spotify %>% 
+  filter(artist_name %in% c('Salar Aghili','Alireza Eftekhari','Alireza Ghorbani')) %>% 
+  ggplot(aes(x =artist_name,y = energy )) +
+  stat_halfeye()
+```
+```{r}
+dadegan::spotify %>% 
+  filter(artist_name %in% c('Salar Aghili','Alireza Eftekhari','Alireza Ghorbani')) %>% 
+  ggplot(aes(x =artist_name,y = energy )) +
+  geom_violin()
+```
+
+
+
